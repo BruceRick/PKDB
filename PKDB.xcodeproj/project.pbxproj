@@ -20,6 +20,7 @@
 		A2CD27F426798A9600117561 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A2CD27F726798A9600117561 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A2CD27F926798A9600117561 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A2CD280E2679A59B00117561 /* Lint */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Lint; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +39,7 @@
 			children = (
 				A2CD27EF26798A8C00117561 /* PKDB */,
 				A2CD27EE26798A8C00117561 /* Products */,
+				A2CD280D2679A59A00117561 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -77,6 +79,14 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		A2CD280D2679A59A00117561 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A2CD280E2679A59B00117561 /* Lint */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -84,6 +94,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A2CD27FC26798A9600117561 /* Build configuration list for PBXNativeTarget "PKDB" */;
 			buildPhases = (
+				A2CD28172679AEFE00117561 /* Lint */,
 				A2CD27E926798A8C00117561 /* Sources */,
 				A2CD27EA26798A8C00117561 /* Frameworks */,
 				A2CD27EB26798A8C00117561 /* Resources */,
@@ -93,6 +104,8 @@
 			dependencies = (
 			);
 			name = PKDB;
+			packageProductDependencies = (
+			);
 			productName = PKDB;
 			productReference = A2CD27ED26798A8C00117561 /* PKDB.app */;
 			productType = "com.apple.product-type.application";
@@ -120,6 +133,8 @@
 				Base,
 			);
 			mainGroup = A2CD27E426798A8C00117561;
+			packageReferences = (
+			);
 			productRefGroup = A2CD27EE26798A8C00117561 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -140,6 +155,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A2CD28172679AEFE00117561 /* Lint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Lint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "SDKROOT=macosx\nswift run --package-path Lint swiftlint\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A2CD27E926798A8C00117561 /* Sources */ = {
