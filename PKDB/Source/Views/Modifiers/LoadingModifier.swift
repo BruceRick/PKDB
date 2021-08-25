@@ -26,23 +26,25 @@ public struct LoadingModifier: ViewModifier {
   }
 
   var loadingView: some View {
-    Image("Loading")
-      .resizable()
-      .renderingMode(.template)
-      .colorMultiply(.init("LoadingColor"))
-      .frame(width: 50, height: 50)
-      .rotationEffect(.degrees(degrees))
-      .padding(.bottom, 20)
-      .onAppear {
-        let repeated = Animation
-          .easeInOut(duration: 0.75)
-          .repeatForever(autoreverses: false)
-        return withAnimation(repeated) {
-          degrees = 360
-        }
-      }.onDisappear {
-        degrees = 0
-      }
+    ActivityIndicator(style: .medium, color: .black)
+//  [B.Rick Aug 25th 2021] Hangs while apollo is doing its thing
+//    Image("Loading")
+//      .resizable()
+//      .renderingMode(.template)
+//      .colorMultiply(.init("LoadingColor"))
+//      .frame(width: 50, height: 50)
+//      .rotationEffect(.degrees(degrees))
+//      .padding(.bottom, 20)
+//      .onAppear {
+//        let repeated = Animation
+//          .easeInOut(duration: 0.75)
+//          .repeatForever(autoreverses: false)
+//        return withAnimation(repeated) {
+//          degrees = 360
+//        }
+//      }.onDisappear {
+//        degrees = 0
+//      }
   }
 }
 
