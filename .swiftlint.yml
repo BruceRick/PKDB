@@ -1,6 +1,5 @@
 indentation: 2
 opt_in_rules:
-- conditional_returns_on_newline
 - force_unwrapping
 - closure_spacing
 - unneeded_parentheses_in_closure_argument

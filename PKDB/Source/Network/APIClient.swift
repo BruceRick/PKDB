@@ -10,7 +10,10 @@ import Combine
 import Apollo
 
 struct API {
-  static var client = ApolloClient(url: URL(string: "https://beta.pokeapi.co/graphql/v1beta")!)
+  static var client: ApolloClient {
+    guard let url = URL(string: "https://beta.pokeapi.co/graphql/v1beta") else { fatalError("Invalid API URL") }
+    return ApolloClient(url: url)
+  }
 
   static private func request<Query: GraphQLQuery>(query: Query) -> Publishers.ApolloFetch<Query> {
     API.client.fetchPublisher(query: query)
