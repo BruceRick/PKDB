@@ -8,3 +8,14 @@ opt_in_rules:
 
 included:
 - PKDB
+
+excluded:
+- PKDB/API.swift
+
+identifier_name:
+  excluded:
+    - id
+
+large_tuple:
+  warning: 5
+  error: 6

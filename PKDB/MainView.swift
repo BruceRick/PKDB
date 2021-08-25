@@ -12,7 +12,7 @@ struct MainView: View {
     NavigationView {
       List {
         cell(text: "Games", iconName: "gamecontroller.fill", destination: EmptyView())
-        cell(text: "Pokedexes", iconName: "book.fill", destination: EmptyView())
+        cell(text: "Pokedexes", iconName: "book.fill", destination: PokedexListView())
       }
       .navigationBarTitle(Text("Pokemon Database"))
     }
