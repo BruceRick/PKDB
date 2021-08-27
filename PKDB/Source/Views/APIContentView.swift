@@ -9,23 +9,27 @@ import SwiftUI
 import Combine
 
 struct APIContentView<Content: View, Data>: View {
-  var request: () -> AnyPublisher<Data?, Error>
-  var content: (Data?) -> Content
-  @State var state = LoadingState.initial
-
+  let request: () -> AnyPublisher<Data?, Error>
+  @ViewBuilder let content: (Data?) -> Content
   @State var data: Data? = nil { didSet { didSetData() } }
+  @State var state = LoadingState.initial
   @State private var cancellable: AnyCancellable?
+
+  var loading: Bool {
+    state == .initial || state == .loading
+  }
 
   var body: some View {
     content(data)
-      .loading(state == .initial || state == .loading)
+      .loading(loading)
       .onAppear(perform: loadData)
       .opacity(state == .error ? 0 : 1)
       .overlay(errorView)
   }
 
   func loadData() {
-    guard state != .success || state != .loading else { return }
+    guard state == .initial else { return }
+    state = .loading
     cancellable = request()
       .replaceError(with: nil)
       .assign(to: \.data, on: self)

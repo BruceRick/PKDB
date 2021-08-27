@@ -11,14 +11,29 @@ import Apollo
 import ApolloCombine
 
 struct PokedexListView: View {
+  var game: String
+  @Binding var selected: String
+  @Environment(\.presentationMode) var presentationMode
+
   var body: some View {
-    APIContentView(request: API.pokedexes) { pokedexes in
+    APIContentView(request: games) { pokedexes in
       List(listItems(pokedexes)) { pokedex in
-        NavigationLink(destination: PokemonListView(pokedex: pokedex.name)) {
-          Text(pokedex.name)
+        Button { didSelect(pokedex.name) } label: {
+          HStack {
+            Text(pokedex.name.capitalized)
+            if selected == pokedex.name {
+              Spacer()
+              Image(systemName: "checkmark")
+            }
+          }
         }
       }
     }
+  }
+
+  func didSelect(_ pokedex: String) {
+    selected = pokedex
+    presentationMode.wrappedValue.dismiss()
   }
 }
 
@@ -31,5 +46,9 @@ extension PokedexListView {
   func listItems(_ pokedexes: [String]?) -> [ListItem] {
     let pokedexes = pokedexes ?? []
     return pokedexes.map(ListItem.init)
+  }
+
+  func games() -> AnyPublisher<[String]?, Error> {
+    API.pokedexes(game: game)
   }
 }

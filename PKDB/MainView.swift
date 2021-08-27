@@ -8,18 +8,43 @@
 import SwiftUI
 
 struct MainView: View {
+  @State var selectedGame = defaultGame { didSet { didSetGame() } }
+  @State var selectedPokedex = defaultGame.pokedexes.first ?? ""
+
   var body: some View {
     NavigationView {
       List {
-        cell(text: "Games", iconName: "gamecontroller.fill", destination: EmptyView())
-        cell(text: "Pokedexes", iconName: "book.fill", destination: PokedexListView())
+        cell(text: "Game",
+             iconName: "gamecontroller.fill",
+             destination: GamesListView(selected: $selectedGame),
+             selected: selectedGame.name)
+        cell(text: "Pokedex",
+             iconName: "book.fill",
+             destination: PokedexListView(game: selectedGame.name, selected: $selectedPokedex),
+             selected: selectedPokedex)
+        cell(text: "Pokemon",
+             iconName: "circle.grid.cross.fill",
+             destination: PokemonListView(pokedex: selectedPokedex, game: selectedGame.name))
       }
       .navigationBarTitle(Text("Pokemon Database"))
+    }.navigationViewStyle(StackNavigationViewStyle())
+  }
+
+  static var defaultGame: Models.Game {
+    Models.Game(name: "sword", pokedexes: ["galar"])
+  }
+
+  func didSetGame() {
+    if let pokedex = selectedGame.pokedexes.first {
+      selectedPokedex = pokedex
     }
   }
 }
 
-func cell<Destination: View>(text: String, iconName: String, destination: Destination) -> some View {
+func cell<Destination: View>(text: String,
+                             iconName: String,
+                             destination: Destination,
+                             selected: String? = nil) -> some View {
   NavigationLink(destination: destination.navigationTitle(text)) {
     HStack {
       Image(systemName: iconName)
@@ -28,6 +53,7 @@ func cell<Destination: View>(text: String, iconName: String, destination: Destin
         .padding(.horizontal, 5)
       Text(text)
       Spacer()
+      Text(selected?.capitalized ?? "")
     }.frame(minHeight: 44)
   }
 }

@@ -1,0 +1,37 @@
+query pokemonDetails($pokemon: String, $game: String, $languageId: Int) {
+  pokemon_v2_pokemon(where: {name: {_eq: $pokemon}}) {
+    height
+    weight
+    base_experience
+    pokemon_v2_pokemonspecy {
+      pokemon_v2_pokemonspeciesflavortexts(where: {language_id: {_eq: $languageId}, pokemon_v2_version: {name: {_eq: $game}}}) {
+        flavor_text
+      }
+      pokemon_v2_pokemonspeciesnames(where: {language_id: {_eq: $languageId}}) {
+        genus
+      }
+      evolution_chain_id
+    }
+    pokemon_v2_pokemontypes {
+      pokemon_v2_type {
+        name
+      }
+    }
+    pokemon_v2_pokemonabilities {
+      pokemon_v2_ability {
+        name
+        pokemon_v2_abilityeffecttexts(where: {language_id: {_eq: $languageId}}) {
+          effect
+        }
+      }
+      is_hidden
+    }
+    pokemon_v2_pokemonstats {
+      effort
+      base_stat
+      pokemon_v2_stat {
+        name
+      }
+    }
+  }
+}

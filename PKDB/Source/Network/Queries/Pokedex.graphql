@@ -1,5 +1,5 @@
-query pokedexes {
-  pokemon_v2_pokedex {
+query pokedexes($game: String) {
+  pokemon_v2_pokedex(where: {pokemon_v2_pokedexversiongroups: {pokemon_v2_versiongroup: {pokemon_v2_versions: {name: {_eq: $game}}}}}) {
     name
   }
 }
@@ -11,9 +11,6 @@ query pokedex($name: String) {
       pokemon_v2_pokemonspecy {
         name
         pokemon_v2_pokemons {
-          pokemon_v2_pokemonsprites {
-            sprites
-          }
           pokemon_v2_pokemontypes {
             pokemon_v2_type {
               name

@@ -26,7 +26,7 @@ public struct LoadingModifier: ViewModifier {
   }
 
   var loadingView: some View {
-    ActivityIndicator(style: .medium, color: .black)
+    ActivityIndicator(style: .medium, color: (.init(named: "LoadingColor") ?? .black))
 //  [B.Rick Aug 25th 2021] Hangs while apollo is doing its thing
 //    Image("Loading")
 //      .resizable()

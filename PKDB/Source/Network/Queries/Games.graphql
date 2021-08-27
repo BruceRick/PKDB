@@ -1,0 +1,12 @@
+query games {
+  pokemon_v2_versiongroup {
+    pokemon_v2_versions {
+      name
+    }
+    pokemon_v2_pokedexversiongroups {
+      pokemon_v2_pokedex {
+        name
+      }
+    }
+  }
+}
