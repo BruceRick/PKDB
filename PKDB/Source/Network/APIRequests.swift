@@ -52,8 +52,9 @@ extension API {
       .eraseToAnyPublisher()
   }
 
-  static func pokemonDetails(pokemon: String, game: String) -> AnyPublisher<Models.PokemonDetails?, Error> {
-    request(query: PokemonDetailsQuery(pokemon: pokemon, game: game, languageId: 9)).map {
+  static func pokemonDetails(pokemon: String, game: String) ->
+  AnyPublisher<Models.PokemonDetails?, Error> {
+    request(query: PokemonDetailsQuery(pokemon: pokemon, game: game, languageId: 9)).tryMap {
       let details = $0.data?.pokemonV2Pokemon.first
       let species = details?.pokemonV2Pokemonspecy
       let summary = species?
@@ -65,12 +66,19 @@ extension API {
       let types = details?
         .pokemonV2Pokemontypes
         .compactMap { $0.pokemonV2Type?.name }
+      let spritesData = details?.pokemonV2Pokemonsprites.first?.sprites.data(using: .utf8)
+      let sprites = try JSONSerialization.jsonObject(with: spritesData ?? Data(),
+                                                     options: .mutableContainers) as? [String: AnyObject]
       let abilities = details?.pokemonV2Pokemonabilities.map {
         Models.PokemonDetails.Ability(
           isHidden: $0.isHidden,
           name: $0
             .pokemonV2Ability?
             .name ?? "",
+          text: $0
+            .pokemonV2Ability?
+            .pokemonV2Abilityflavortexts
+            .first?.flavorText ?? "",
           effect: $0
             .pokemonV2Ability?
             .pokemonV2Abilityeffecttexts
@@ -89,6 +97,7 @@ extension API {
         summary: summary ?? "",
         description: description ?? "",
         types: types  ?? [],
+        sprites: sprites ?? [:],
         abilities: abilities ?? [],
         stats: stats ?? [])
     }

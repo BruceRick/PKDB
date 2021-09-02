@@ -21,13 +21,14 @@ struct PokemonDetailsView: View {
     APIContentView(request: details) { details in
       content(pokemon: details)
         .navigationTitle(pokemonName.capitalized)
+        .onAppear { loadSprite(pokemon: details) }
         .onReceive(imageLoader.didChange, perform: imageLoaded)
     }
   }
 
   func content(pokemon: Models.PokemonDetails?) -> some View {
     List {
-      pokemonSprite
+      pokemonImageView
       if let pokemon = pokemon {
         types(pokemon.types)
         entry(pokemon)
@@ -41,23 +42,17 @@ struct PokemonDetailsView: View {
   var pokemonImageView: some View {
     switch pokemonImage {
     case let image? where image != UIImage():
-      Image(uiImage: image)
-        .resizable()
+      HStack {
+        Spacer()
+        Image(uiImage: image)
+          .resizable()
+          .frame(width: 200, height: 200)
+          .loading(pokemonImage == nil)
+          .padding(.top, 20)
+        Spacer()
+      }
     default:
-      Image(systemName: "exclamationmark.circle")
-        .foregroundColor(.red)
-        .font(.system(size: 30))
-    }
-  }
-
-  var pokemonSprite: some View {
-    HStack {
-      Spacer()
-      pokemonImageView
-        .frame(width: 200, height: 200)
-        .loading(pokemonImage == nil)
-        .padding(.top, 20)
-      Spacer()
+      EmptyView()
     }
   }
 
@@ -100,7 +95,12 @@ struct PokemonDetailsView: View {
                 .fontWeight(.bold)
             }
           }
-          Text(item.ability.effect)
+          if !item.ability.text.isEmpty {
+            Text(item.ability.text)
+          }
+          if !item.ability.effect.isEmpty {
+            Text(item.ability.effect)
+          }
         }
         .padding(.vertical, 10)
       }
@@ -125,6 +125,19 @@ struct PokemonDetailsView: View {
         Text("\(pokemon.weight)")
       }
     }
+  }
+
+  func loadSprite(pokemon: Models.PokemonDetails?) {
+    if let sprites = pokemon?.sprites["other"],
+       let official = sprites["official-artwork"] as? [String: AnyObject],
+       let urlString = official["front_default"] as? String {
+      pokemonImage = nil
+      imageLoader = ImageLoader(urlString: imageURLString(path: urlString))
+    }
+  }
+
+  func imageURLString(path: String) -> String {
+    "\(API.imageURLString)\(path.replacingOccurrences(of: "/media", with: ""))"
   }
 
   func imageLoaded(data: Data) {

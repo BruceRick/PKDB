@@ -680,6 +680,7 @@ public final class PokemonDetailsQuery: GraphQLQuery {
             __typename
             genus
           }
+          evolution_chain_id
         }
         pokemon_v2_pokemontypes {
           __typename
@@ -690,6 +691,7 @@ public final class PokemonDetailsQuery: GraphQLQuery {
         }
         pokemon_v2_pokemonabilities {
           __typename
+          is_hidden
           pokemon_v2_ability {
             __typename
             name
@@ -697,8 +699,13 @@ public final class PokemonDetailsQuery: GraphQLQuery {
               __typename
               effect
             }
+            pokemon_v2_abilityflavortexts(
+              where: {language_id: {_eq: $languageId}, pokemon_v2_versiongroup: {pokemon_v2_versions: {name: {_eq: $game}}}}
+            ) {
+              __typename
+              flavor_text
+            }
           }
-          is_hidden
         }
         pokemon_v2_pokemonstats {
           __typename
@@ -708,6 +715,10 @@ public final class PokemonDetailsQuery: GraphQLQuery {
             __typename
             name
           }
+        }
+        pokemon_v2_pokemonsprites {
+          __typename
+          sprites
         }
       }
     }
@@ -771,6 +782,7 @@ public final class PokemonDetailsQuery: GraphQLQuery {
           GraphQLField("pokemon_v2_pokemontypes", type: .nonNull(.list(.nonNull(.object(PokemonV2Pokemontype.selections))))),
           GraphQLField("pokemon_v2_pokemonabilities", type: .nonNull(.list(.nonNull(.object(PokemonV2Pokemonability.selections))))),
           GraphQLField("pokemon_v2_pokemonstats", type: .nonNull(.list(.nonNull(.object(PokemonV2Pokemonstat.selections))))),
+          GraphQLField("pokemon_v2_pokemonsprites", type: .nonNull(.list(.nonNull(.object(PokemonV2Pokemonsprite.selections))))),
         ]
       }
 
@@ -780,8 +792,8 @@ public final class PokemonDetailsQuery: GraphQLQuery {
         self.resultMap = unsafeResultMap
       }
 
-      public init(height: Int? = nil, weight: Int? = nil, baseExperience: Int? = nil, pokemonV2Pokemonspecy: PokemonV2Pokemonspecy? = nil, pokemonV2Pokemontypes: [PokemonV2Pokemontype], pokemonV2Pokemonabilities: [PokemonV2Pokemonability], pokemonV2Pokemonstats: [PokemonV2Pokemonstat]) {
-        self.init(unsafeResultMap: ["__typename": "pokemon_v2_pokemon", "height": height, "weight": weight, "base_experience": baseExperience, "pokemon_v2_pokemonspecy": pokemonV2Pokemonspecy.flatMap { (value: PokemonV2Pokemonspecy) -> ResultMap in value.resultMap }, "pokemon_v2_pokemontypes": pokemonV2Pokemontypes.map { (value: PokemonV2Pokemontype) -> ResultMap in value.resultMap }, "pokemon_v2_pokemonabilities": pokemonV2Pokemonabilities.map { (value: PokemonV2Pokemonability) -> ResultMap in value.resultMap }, "pokemon_v2_pokemonstats": pokemonV2Pokemonstats.map { (value: PokemonV2Pokemonstat) -> ResultMap in value.resultMap }])
+      public init(height: Int? = nil, weight: Int? = nil, baseExperience: Int? = nil, pokemonV2Pokemonspecy: PokemonV2Pokemonspecy? = nil, pokemonV2Pokemontypes: [PokemonV2Pokemontype], pokemonV2Pokemonabilities: [PokemonV2Pokemonability], pokemonV2Pokemonstats: [PokemonV2Pokemonstat], pokemonV2Pokemonsprites: [PokemonV2Pokemonsprite]) {
+        self.init(unsafeResultMap: ["__typename": "pokemon_v2_pokemon", "height": height, "weight": weight, "base_experience": baseExperience, "pokemon_v2_pokemonspecy": pokemonV2Pokemonspecy.flatMap { (value: PokemonV2Pokemonspecy) -> ResultMap in value.resultMap }, "pokemon_v2_pokemontypes": pokemonV2Pokemontypes.map { (value: PokemonV2Pokemontype) -> ResultMap in value.resultMap }, "pokemon_v2_pokemonabilities": pokemonV2Pokemonabilities.map { (value: PokemonV2Pokemonability) -> ResultMap in value.resultMap }, "pokemon_v2_pokemonstats": pokemonV2Pokemonstats.map { (value: PokemonV2Pokemonstat) -> ResultMap in value.resultMap }, "pokemon_v2_pokemonsprites": pokemonV2Pokemonsprites.map { (value: PokemonV2Pokemonsprite) -> ResultMap in value.resultMap }])
       }
 
       public var __typename: String {
@@ -860,6 +872,16 @@ public final class PokemonDetailsQuery: GraphQLQuery {
         }
       }
 
+      /// An array relationship
+      public var pokemonV2Pokemonsprites: [PokemonV2Pokemonsprite] {
+        get {
+          return (resultMap["pokemon_v2_pokemonsprites"] as! [ResultMap]).map { (value: ResultMap) -> PokemonV2Pokemonsprite in PokemonV2Pokemonsprite(unsafeResultMap: value) }
+        }
+        set {
+          resultMap.updateValue(newValue.map { (value: PokemonV2Pokemonsprite) -> ResultMap in value.resultMap }, forKey: "pokemon_v2_pokemonsprites")
+        }
+      }
+
       public struct PokemonV2Pokemonspecy: GraphQLSelectionSet {
         public static let possibleTypes: [String] = ["pokemon_v2_pokemonspecies"]
 
@@ -868,6 +890,7 @@ public final class PokemonDetailsQuery: GraphQLQuery {
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
             GraphQLField("pokemon_v2_pokemonspeciesflavortexts", arguments: ["where": ["language_id": ["_eq": GraphQLVariable("languageId")], "pokemon_v2_version": ["name": ["_eq": GraphQLVariable("game")]]]], type: .nonNull(.list(.nonNull(.object(PokemonV2Pokemonspeciesflavortext.selections))))),
             GraphQLField("pokemon_v2_pokemonspeciesnames", arguments: ["where": ["language_id": ["_eq": GraphQLVariable("languageId")]]], type: .nonNull(.list(.nonNull(.object(PokemonV2Pokemonspeciesname.selections))))),
+            GraphQLField("evolution_chain_id", type: .scalar(Int.self)),
           ]
         }
 
@@ -877,8 +900,8 @@ public final class PokemonDetailsQuery: GraphQLQuery {
           self.resultMap = unsafeResultMap
         }
 
-        public init(pokemonV2Pokemonspeciesflavortexts: [PokemonV2Pokemonspeciesflavortext], pokemonV2Pokemonspeciesnames: [PokemonV2Pokemonspeciesname]) {
-          self.init(unsafeResultMap: ["__typename": "pokemon_v2_pokemonspecies", "pokemon_v2_pokemonspeciesflavortexts": pokemonV2Pokemonspeciesflavortexts.map { (value: PokemonV2Pokemonspeciesflavortext) -> ResultMap in value.resultMap }, "pokemon_v2_pokemonspeciesnames": pokemonV2Pokemonspeciesnames.map { (value: PokemonV2Pokemonspeciesname) -> ResultMap in value.resultMap }])
+        public init(pokemonV2Pokemonspeciesflavortexts: [PokemonV2Pokemonspeciesflavortext], pokemonV2Pokemonspeciesnames: [PokemonV2Pokemonspeciesname], evolutionChainId: Int? = nil) {
+          self.init(unsafeResultMap: ["__typename": "pokemon_v2_pokemonspecies", "pokemon_v2_pokemonspeciesflavortexts": pokemonV2Pokemonspeciesflavortexts.map { (value: PokemonV2Pokemonspeciesflavortext) -> ResultMap in value.resultMap }, "pokemon_v2_pokemonspeciesnames": pokemonV2Pokemonspeciesnames.map { (value: PokemonV2Pokemonspeciesname) -> ResultMap in value.resultMap }, "evolution_chain_id": evolutionChainId])
         }
 
         public var __typename: String {
@@ -907,6 +930,15 @@ public final class PokemonDetailsQuery: GraphQLQuery {
           }
           set {
             resultMap.updateValue(newValue.map { (value: PokemonV2Pokemonspeciesname) -> ResultMap in value.resultMap }, forKey: "pokemon_v2_pokemonspeciesnames")
+          }
+        }
+
+        public var evolutionChainId: Int? {
+          get {
+            return resultMap["evolution_chain_id"] as? Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "evolution_chain_id")
           }
         }
 
@@ -1074,8 +1106,8 @@ public final class PokemonDetailsQuery: GraphQLQuery {
         public static var selections: [GraphQLSelection] {
           return [
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-            GraphQLField("pokemon_v2_ability", type: .object(PokemonV2Ability.selections)),
             GraphQLField("is_hidden", type: .nonNull(.scalar(Bool.self))),
+            GraphQLField("pokemon_v2_ability", type: .object(PokemonV2Ability.selections)),
           ]
         }
 
@@ -1085,8 +1117,8 @@ public final class PokemonDetailsQuery: GraphQLQuery {
           self.resultMap = unsafeResultMap
         }
 
-        public init(pokemonV2Ability: PokemonV2Ability? = nil, isHidden: Bool) {
-          self.init(unsafeResultMap: ["__typename": "pokemon_v2_pokemonability", "pokemon_v2_ability": pokemonV2Ability.flatMap { (value: PokemonV2Ability) -> ResultMap in value.resultMap }, "is_hidden": isHidden])
+        public init(isHidden: Bool, pokemonV2Ability: PokemonV2Ability? = nil) {
+          self.init(unsafeResultMap: ["__typename": "pokemon_v2_pokemonability", "is_hidden": isHidden, "pokemon_v2_ability": pokemonV2Ability.flatMap { (value: PokemonV2Ability) -> ResultMap in value.resultMap }])
         }
 
         public var __typename: String {
@@ -1095,6 +1127,15 @@ public final class PokemonDetailsQuery: GraphQLQuery {
           }
           set {
             resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        public var isHidden: Bool {
+          get {
+            return resultMap["is_hidden"]! as! Bool
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "is_hidden")
           }
         }
 
@@ -1108,15 +1149,6 @@ public final class PokemonDetailsQuery: GraphQLQuery {
           }
         }
 
-        public var isHidden: Bool {
-          get {
-            return resultMap["is_hidden"]! as! Bool
-          }
-          set {
-            resultMap.updateValue(newValue, forKey: "is_hidden")
-          }
-        }
-
         public struct PokemonV2Ability: GraphQLSelectionSet {
           public static let possibleTypes: [String] = ["pokemon_v2_ability"]
 
@@ -1125,6 +1157,7 @@ public final class PokemonDetailsQuery: GraphQLQuery {
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("name", type: .nonNull(.scalar(String.self))),
               GraphQLField("pokemon_v2_abilityeffecttexts", arguments: ["where": ["language_id": ["_eq": GraphQLVariable("languageId")]]], type: .nonNull(.list(.nonNull(.object(PokemonV2Abilityeffecttext.selections))))),
+              GraphQLField("pokemon_v2_abilityflavortexts", arguments: ["where": ["language_id": ["_eq": GraphQLVariable("languageId")], "pokemon_v2_versiongroup": ["pokemon_v2_versions": ["name": ["_eq": GraphQLVariable("game")]]]]], type: .nonNull(.list(.nonNull(.object(PokemonV2Abilityflavortext.selections))))),
             ]
           }
 
@@ -1134,8 +1167,8 @@ public final class PokemonDetailsQuery: GraphQLQuery {
             self.resultMap = unsafeResultMap
           }
 
-          public init(name: String, pokemonV2Abilityeffecttexts: [PokemonV2Abilityeffecttext]) {
-            self.init(unsafeResultMap: ["__typename": "pokemon_v2_ability", "name": name, "pokemon_v2_abilityeffecttexts": pokemonV2Abilityeffecttexts.map { (value: PokemonV2Abilityeffecttext) -> ResultMap in value.resultMap }])
+          public init(name: String, pokemonV2Abilityeffecttexts: [PokemonV2Abilityeffecttext], pokemonV2Abilityflavortexts: [PokemonV2Abilityflavortext]) {
+            self.init(unsafeResultMap: ["__typename": "pokemon_v2_ability", "name": name, "pokemon_v2_abilityeffecttexts": pokemonV2Abilityeffecttexts.map { (value: PokemonV2Abilityeffecttext) -> ResultMap in value.resultMap }, "pokemon_v2_abilityflavortexts": pokemonV2Abilityflavortexts.map { (value: PokemonV2Abilityflavortext) -> ResultMap in value.resultMap }])
           }
 
           public var __typename: String {
@@ -1163,6 +1196,16 @@ public final class PokemonDetailsQuery: GraphQLQuery {
             }
             set {
               resultMap.updateValue(newValue.map { (value: PokemonV2Abilityeffecttext) -> ResultMap in value.resultMap }, forKey: "pokemon_v2_abilityeffecttexts")
+            }
+          }
+
+          /// An array relationship
+          public var pokemonV2Abilityflavortexts: [PokemonV2Abilityflavortext] {
+            get {
+              return (resultMap["pokemon_v2_abilityflavortexts"] as! [ResultMap]).map { (value: ResultMap) -> PokemonV2Abilityflavortext in PokemonV2Abilityflavortext(unsafeResultMap: value) }
+            }
+            set {
+              resultMap.updateValue(newValue.map { (value: PokemonV2Abilityflavortext) -> ResultMap in value.resultMap }, forKey: "pokemon_v2_abilityflavortexts")
             }
           }
 
@@ -1201,6 +1244,45 @@ public final class PokemonDetailsQuery: GraphQLQuery {
               }
               set {
                 resultMap.updateValue(newValue, forKey: "effect")
+              }
+            }
+          }
+
+          public struct PokemonV2Abilityflavortext: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["pokemon_v2_abilityflavortext"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("flavor_text", type: .nonNull(.scalar(String.self))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(flavorText: String) {
+              self.init(unsafeResultMap: ["__typename": "pokemon_v2_abilityflavortext", "flavor_text": flavorText])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            public var flavorText: String {
+              get {
+                return resultMap["flavor_text"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "flavor_text")
               }
             }
           }
@@ -1302,6 +1384,45 @@ public final class PokemonDetailsQuery: GraphQLQuery {
             set {
               resultMap.updateValue(newValue, forKey: "name")
             }
+          }
+        }
+      }
+
+      public struct PokemonV2Pokemonsprite: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["pokemon_v2_pokemonsprites"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("sprites", type: .nonNull(.scalar(String.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(sprites: String) {
+          self.init(unsafeResultMap: ["__typename": "pokemon_v2_pokemonsprites", "sprites": sprites])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        public var sprites: String {
+          get {
+            return resultMap["sprites"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "sprites")
           }
         }
       }

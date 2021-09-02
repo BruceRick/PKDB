@@ -10,6 +10,8 @@ import Combine
 import Apollo
 
 struct API {
+  static let imageURLString = "https://raw.githubusercontent.com/PokeAPI/sprites/master/"
+
   static var client: ApolloClient {
     guard let url = URL(string: "https://beta.pokeapi.co/graphql/v1beta") else { fatalError("Invalid API URL") }
     return ApolloClient(url: url)

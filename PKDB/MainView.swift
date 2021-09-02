@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MainView: View {
-  @State var selectedGame = defaultGame { didSet { didSetGame() } }
+  @State var selectedGame = defaultGame
   @State var selectedPokedex = defaultGame.pokedexes.first ?? ""
 
   var body: some View {
@@ -27,7 +27,9 @@ struct MainView: View {
              destination: PokemonListView(pokedex: selectedPokedex, game: selectedGame.name))
       }
       .navigationBarTitle(Text("Pokemon Database"))
-    }.navigationViewStyle(StackNavigationViewStyle())
+    }
+    .navigationViewStyle(StackNavigationViewStyle())
+    .onChange(of: selectedGame, perform: { _ in didSetGame() })
   }
 
   static var defaultGame: Models.Game {

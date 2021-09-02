@@ -18,13 +18,16 @@ query pokemonDetails($pokemon: String, $game: String, $languageId: Int) {
       }
     }
     pokemon_v2_pokemonabilities {
+      is_hidden
       pokemon_v2_ability {
         name
         pokemon_v2_abilityeffecttexts(where: {language_id: {_eq: $languageId}}) {
           effect
         }
+        pokemon_v2_abilityflavortexts(where: {language_id: {_eq: $languageId}, pokemon_v2_versiongroup: {pokemon_v2_versions: {name: {_eq: $game}}}}) {
+          flavor_text
+        }
       }
-      is_hidden
     }
     pokemon_v2_pokemonstats {
       effort
@@ -32,6 +35,9 @@ query pokemonDetails($pokemon: String, $game: String, $languageId: Int) {
       pokemon_v2_stat {
         name
       }
+    }
+    pokemon_v2_pokemonsprites {
+      sprites
     }
   }
 }
