@@ -20,22 +20,22 @@ struct PokemonListView: View {
 
   var body: some View {
     APIContentView(request: entries) { entries in
-      List(listItems(entries)) { item in
+      List(entries, id: \.number) { item in
         cell(item)
       }
       .navigationTitle(pokedex.capitalized)
     }
   }
 
-  func cell(_ item: ListItem) -> some View {
-    NavigationLink(destination: PokemonDetailsView(pokemonName: item.pokemonEntry.name, game: game)) {
+  func cell(_ pokemon: Models.PokemonEntry) -> some View {
+    NavigationLink(destination: PokemonDetailsView(pokemonName: pokemon.name, game: game)) {
       HStack {
-        Text((formattedEntryNumber(item)))
+        Text((formattedEntryNumber(pokemon)))
           .padding(.trailing, 5)
-        Text(item.pokemonEntry.name.capitalized)
+        Text(pokemon.name.capitalized)
         Spacer()
-        ForEach(item.pokemonEntry.types.identifiable) {
-          TypeIconView(type: $0.value)
+        ForEach(pokemon.types, id: \.self) {
+          TypeIconView(type: $0)
         }
       }
     }
@@ -43,21 +43,11 @@ struct PokemonListView: View {
 }
 
 extension PokemonListView {
-  func entries() -> AnyPublisher<[Models.PokemonEntry]?, Error> {
+  func entries() -> AnyPublisher<[Models.PokemonEntry], Error> {
     API.pokemonEntries(pokedex)
   }
 
-  struct ListItem: Identifiable {
-    var pokemonEntry: Models.PokemonEntry
-    var id: String { String(pokemonEntry.number) }
-  }
-
-  func listItems(_ entries: [Models.PokemonEntry]?) -> [ListItem] {
-    let entries = entries ?? []
-    return entries.map(ListItem.init)
-  }
-
-  func formattedEntryNumber(_ item: ListItem) -> String {
-    entryFormatter.string(from: NSNumber(value: item.pokemonEntry.number)) ?? "???"
+  func formattedEntryNumber(_ pokemon: Models.PokemonEntry) -> String {
+    entryFormatter.string(from: NSNumber(value: pokemon.number)) ?? "???"
   }
 }

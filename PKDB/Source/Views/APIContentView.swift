@@ -9,9 +9,8 @@ import SwiftUI
 import Combine
 
 struct APIContentView<Content: View, Data>: View {
-  let request: () -> AnyPublisher<Data?, Error>
-  @ViewBuilder let content: (Data?) -> Content
-  @State var data: Data? = nil { didSet { didSetData() } }
+  let request: () -> AnyPublisher<Data, Error>
+  @ViewBuilder let content: (Data) -> Content
   @State var state = LoadingState.initial
   @State private var cancellable: AnyCancellable?
 
@@ -20,46 +19,63 @@ struct APIContentView<Content: View, Data>: View {
   }
 
   var body: some View {
-    content(data)
-      .loading(loading)
+    main
       .onAppear(perform: loadData)
-      .opacity(state == .error ? 0 : 1)
-      .overlay(errorView)
+  }
+
+  @ViewBuilder
+  var main: some View {
+    switch state {
+    case .success(let data):
+      content(data)
+    case .loading, .initial:
+      VStack {
+        Spacer()
+        ActivityIndicator(style: .medium, color: (.init(named: "LoadingColor") ?? .black))
+        Spacer()
+      }
+    case .error(_):
+      VStack {
+        Spacer()
+        errorView
+        Spacer()
+      }
+    }
   }
 
   func loadData() {
     guard state == .initial else { return }
     state = .loading
     cancellable = request()
-      .replaceError(with: nil)
-      .assign(to: \.data, on: self)
-  }
-
-  func didSetData() {
-    switch data {
-    case .some(_):
-      state = .success
-    case .none:
-      state = .error
-    }
+      .map { LoadingState.success($0) }
+      .catch { Just(LoadingState.error($0)) }
+      .assign(to: \.state, on: self)
   }
 
   @ViewBuilder var errorView: some View {
-    if state == .error {
-      Text("An unexpected error ocurred")
-        .foregroundColor(Color.red)
-        .fontWeight(.bold)
-    } else {
-      EmptyView()
-    }
+    Text("An unexpected error ocurred")
+      .foregroundColor(Color.red)
+      .fontWeight(.bold)
   }
 }
 
 extension APIContentView {
-  enum LoadingState {
+  enum LoadingState: Equatable {
     case initial
     case loading
-    case success
-    case error
+    case success(Data)
+    case error(Error)
+
+    static func == (state1: LoadingState, state2: LoadingState) -> Bool {
+      switch (state1, state2) {
+      case (.initial, .initial),
+        (.loading, .loading),
+        (.success, .success),
+        (.error, .error):
+        return true
+      default:
+        return false
+      }
+    }
   }
 }

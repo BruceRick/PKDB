@@ -57,7 +57,7 @@ struct MovesView: View {
     APIContentView(request: moves) { moves in
       List {
         Section(header: header) {
-          ForEach(filteredMoves(moves: moves ?? []), id: \.id) { move in
+          ForEach(filteredMoves(moves: moves), id: \.id) { move in
             cell(move: move)
           }
         }
@@ -112,7 +112,7 @@ struct MovesView: View {
 }
 
 extension MovesView {
-  func moves() -> AnyPublisher<[Models.Move]?, Error> {
+  func moves() -> AnyPublisher<[Models.Move], Error> {
     API.pokemonMoves(pokemon: pokemon, game: game)
   }
 }

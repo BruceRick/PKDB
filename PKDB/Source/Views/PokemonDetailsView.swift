@@ -62,8 +62,8 @@ struct PokemonDetailsView: View {
     Section(header: Text("Type")) {
       // NavigationLink(destination: DamageRelationsView(types: types)) {
         HStack(spacing: 20) {
-          ForEach(types.identifiable) { type in
-            TypeIconView(type: type.value, text: true)
+          ForEach(types, id: \.self) {
+            TypeIconView(type: $0, text: true)
           }
         }
         .padding([.vertical, .trailing], 10)
@@ -85,23 +85,23 @@ struct PokemonDetailsView: View {
 
   func abilities(_ pokemon: Models.PokemonDetails) -> some View {
     Section(header: Text("Abilities")) {
-      ForEach(pokemon.abilities.map(AbilityListItem.init)) { item in
+      ForEach(pokemon.abilities, id: \.name) { ability in
         VStack(alignment: .leading, spacing: 10) {
           HStack {
-            Text(item.ability.name.capitalized)
+            Text(ability.name.capitalized)
               .font(.system(.title2))
               .fontWeight(.bold)
-            if item.ability.isHidden {
+            if ability.isHidden {
               Text("HIDDEN")
                 .foregroundColor(.red)
                 .fontWeight(.bold)
             }
           }
-          if !item.ability.text.isEmpty {
-            Text(item.ability.text)
+          if !ability.text.isEmpty {
+            Text(ability.text)
           }
-          if !item.ability.effect.isEmpty {
-            Text(item.ability.effect)
+          if !ability.effect.isEmpty {
+            Text(ability.effect)
           }
         }
         .padding(.vertical, 10)
@@ -111,11 +111,11 @@ struct PokemonDetailsView: View {
 
   func stats(_ pokemon: Models.PokemonDetails) -> some View {
     Section(header: Text("Stats")) {
-      ForEach(pokemon.stats.map(StatListItem.init)) { item in
+      ForEach(pokemon.stats, id: \.name) { stat in
         HStack {
-          Text(item.stat.name.capitalized)
+          Text(stat.name.capitalized)
           Spacer()
-          Text("\(item.stat.base)")
+          Text("\(stat.base)")
         }
       }
       HStack {
@@ -128,11 +128,11 @@ struct PokemonDetailsView: View {
 
   func evYield(_ pokemon: Models.PokemonDetails) -> some View {
     Section(header: Text("EV Yield")) {
-      ForEach(pokemon.stats.filter { $0.effort > 0 }.map(StatListItem.init)) { item in
+      ForEach(pokemon.stats.filter { $0.effort > 0 }, id: \.name) { stat in
         HStack {
-          Text(item.stat.name.capitalized)
+          Text(stat.name.capitalized)
           Spacer()
-          Text("\(item.stat.effort)")
+          Text("\(stat.effort)")
         }
       }
     }
@@ -186,21 +186,7 @@ struct PokemonDetailsView: View {
 }
 
 extension PokemonDetailsView {
-  func details() -> AnyPublisher<Models.PokemonDetails?, Error> {
+  func details() -> AnyPublisher<Models.PokemonDetails, Error> {
     API.pokemonDetails(pokemon: pokemonName, game: game)
-  }
-
-  struct AbilityListItem: Identifiable {
-    var id: String {
-      ability.name
-    }
-    var ability: Models.PokemonDetails.Ability
-  }
-
-  struct StatListItem: Identifiable {
-    var id: String {
-      stat.name
-    }
-    var stat: Models.PokemonDetails.Stat
   }
 }

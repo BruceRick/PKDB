@@ -14,7 +14,7 @@ extension API {
     API.client.fetchPublisher(query: query)
   }
 
-  static func games() -> AnyPublisher<[Models.Game]?, Error> {
+  static func games() -> AnyPublisher<[Models.Game], Error> {
     request(query: GamesQuery())
       .map {
         let games: [[Models.Game]]? = $0.data?.pokemonV2Versiongroup.map {
@@ -30,15 +30,15 @@ extension API {
       .eraseToAnyPublisher()
   }
 
-  static func pokedexes(game: String) -> AnyPublisher<[String]?, Error> {
+  static func pokedexes(game: String) -> AnyPublisher<[String], Error> {
     request(query: PokedexesQuery(game: game))
       .map {
-        $0.data?.pokemonV2Pokedex.map { $0.name }
+        $0.data?.pokemonV2Pokedex.map { $0.name } ?? []
       }
       .eraseToAnyPublisher()
   }
 
-  static func pokemonEntries(_ pokedex: String) -> AnyPublisher<[Models.PokemonEntry]?, Error> {
+  static func pokemonEntries(_ pokedex: String) -> AnyPublisher<[Models.PokemonEntry], Error> {
     request(query: PokedexQuery(name: pokedex))
       .map {
         $0.data?.pokemonV2Pokedex.first?.pokemonV2Pokemondexnumbers.map {
@@ -47,13 +47,13 @@ extension API {
           let pokemon = $0.pokemonV2Pokemonspecy?.pokemonV2Pokemons.first
           let types  = pokemon?.pokemonV2Pokemontypes.map { $0.pokemonV2Type?.name }.compactMap { $0 } ?? []
           return .init(name: name, number: number, types: types)
-        }
+        } ?? []
       }
       .eraseToAnyPublisher()
   }
 
   static func pokemonDetails(pokemon: String, game: String) ->
-  AnyPublisher<Models.PokemonDetails?, Error> {
+  AnyPublisher<Models.PokemonDetails, Error> {
     request(query: PokemonDetailsQuery(pokemon: pokemon, game: game, languageId: 9)).tryMap {
       let details = $0.data?.pokemonV2Pokemon.first
       let species = details?.pokemonV2Pokemonspecy
@@ -104,7 +104,7 @@ extension API {
     .eraseToAnyPublisher()
   }
 
-  static func pokemonMoves(pokemon: String, game: String) -> AnyPublisher<[Models.Move]?, Error> {
+  static func pokemonMoves(pokemon: String, game: String) -> AnyPublisher<[Models.Move], Error> {
     request(query: PokemonMovesQuery(pokemon: pokemon, game: game)).tryMap {
       $0.data?.pokemonV2Pokemonmove.map {
         let id = $0.id
@@ -124,7 +124,7 @@ extension API {
           item: item,
           power: power,
           level: level)
-      }
+      } ?? []
     }
     .eraseToAnyPublisher()
   }
