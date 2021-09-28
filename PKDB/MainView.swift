@@ -25,6 +25,18 @@ struct MainView: View {
         cell(text: "Pokemon",
              iconName: "circle.grid.cross.fill",
              destination: PokemonListView(pokedex: selectedPokedex, game: selectedGame.name))
+        cell(text: "Abilities",
+             iconName: "leaf.fill",
+             destination: EmptyView())
+        cell(text: "Moves",
+             iconName: "bolt.fill",
+             destination: EmptyView())
+        cell(text: "Items",
+             iconName: "gift.fill",
+             destination: EmptyView())
+        cell(text: "Settings",
+             iconName: "gearshape.fill",
+             destination: EmptyView())
       }
       .navigationBarTitle(Text("Pokemon Database"))
     }
