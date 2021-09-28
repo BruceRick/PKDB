@@ -25,7 +25,7 @@ struct GamesListView: View {
               Image(systemName: "checkmark")
             }
           }
-        }
+        }.buttonStyle(.plain)
       }
     }
   }

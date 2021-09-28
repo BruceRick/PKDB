@@ -10,6 +10,9 @@
 		A20DDECB26D7F07D002BD09C /* Games.graphql in Resources */ = {isa = PBXBuildFile; fileRef = A20DDECA26D7F07D002BD09C /* Games.graphql */; };
 		A20DDECD26D7F4EE002BD09C /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20DDECC26D7F4EE002BD09C /* Game.swift */; };
 		A20DDECF26D8037B002BD09C /* GamesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20DDECE26D8037B002BD09C /* GamesListView.swift */; };
+		A24CEFCD26E084AF00AB23A0 /* PokemonMoves.graphql in Resources */ = {isa = PBXBuildFile; fileRef = A24CEFCC26E084AF00AB23A0 /* PokemonMoves.graphql */; };
+		A24CEFCF26E0889B00AB23A0 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24CEFCE26E0889B00AB23A0 /* Move.swift */; };
+		A24CEFD426E57D5400AB23A0 /* MovesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24CEFD326E57D5400AB23A0 /* MovesView.swift */; };
 		A26E9988267D381100D6ED8C /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26E9987267D381100D6ED8C /* APIClient.swift */; };
 		A26E998F267D3DFE00D6ED8C /* APIContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26E998E267D3DFE00D6ED8C /* APIContentView.swift */; };
 		A26E9992267D3F3F00D6ED8C /* LoadingModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26E9991267D3F3F00D6ED8C /* LoadingModifier.swift */; };
@@ -38,6 +41,9 @@
 		A20DDECA26D7F07D002BD09C /* Games.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = Games.graphql; sourceTree = "<group>"; };
 		A20DDECC26D7F4EE002BD09C /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		A20DDECE26D8037B002BD09C /* GamesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesListView.swift; sourceTree = "<group>"; };
+		A24CEFCC26E084AF00AB23A0 /* PokemonMoves.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = PokemonMoves.graphql; sourceTree = "<group>"; };
+		A24CEFCE26E0889B00AB23A0 /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
+		A24CEFD326E57D5400AB23A0 /* MovesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovesView.swift; sourceTree = "<group>"; };
 		A26E9987267D381100D6ED8C /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		A26E998E267D3DFE00D6ED8C /* APIContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIContentView.swift; sourceTree = "<group>"; };
 		A26E9991267D3F3F00D6ED8C /* LoadingModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingModifier.swift; sourceTree = "<group>"; };
@@ -108,6 +114,7 @@
 				A26E9993267D45BA00D6ED8C /* PokemonListView.swift */,
 				A27F7A8226D6C7B00004B39D /* PokemonDetailsView.swift */,
 				A26E999C267D693500D6ED8C /* TypeIconView.swift */,
+				A24CEFD326E57D5400AB23A0 /* MovesView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -118,6 +125,7 @@
 				A20DDECA26D7F07D002BD09C /* Games.graphql */,
 				A2CBCAC82679D184008AC09F /* Pokedex.graphql */,
 				A27F7A9026D6CFEC0004B39D /* PokemonDetails.graphql */,
+				A24CEFCC26E084AF00AB23A0 /* PokemonMoves.graphql */,
 			);
 			path = Queries;
 			sourceTree = "<group>";
@@ -147,6 +155,7 @@
 				A27F7A8926D6CC880004B39D /* PokemonEntry.swift */,
 				A27F7A8E26D6CE670004B39D /* Pokemon.swift */,
 				A20DDECC26D7F4EE002BD09C /* Game.swift */,
+				A24CEFCE26E0889B00AB23A0 /* Move.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -277,6 +286,7 @@
 				A20DDECB26D7F07D002BD09C /* Games.graphql in Resources */,
 				A27F7A9126D6CFEC0004B39D /* PokemonDetails.graphql in Resources */,
 				A2CBCAC92679D184008AC09F /* Pokedex.graphql in Resources */,
+				A24CEFCD26E084AF00AB23A0 /* PokemonMoves.graphql in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,6 +336,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A24CEFCF26E0889B00AB23A0 /* Move.swift in Sources */,
 				A26E9994267D45BA00D6ED8C /* PokemonListView.swift in Sources */,
 				A20DDECD26D7F4EE002BD09C /* Game.swift in Sources */,
 				A27F7A8326D6C7B00004B39D /* PokemonDetailsView.swift in Sources */,
@@ -341,6 +352,7 @@
 				A26E998F267D3DFE00D6ED8C /* APIContentView.swift in Sources */,
 				A26E99A0267D6B6600D6ED8C /* IdentifiableString.swift in Sources */,
 				A2CD27F126798A8C00117561 /* PKDBApp.swift in Sources */,
+				A24CEFD426E57D5400AB23A0 /* MovesView.swift in Sources */,
 				A26E9992267D3F3F00D6ED8C /* LoadingModifier.swift in Sources */,
 				A20DDECF26D8037B002BD09C /* GamesListView.swift in Sources */,
 				A2CBCACD2679D45A008AC09F /* PokedexListView.swift in Sources */,
@@ -472,9 +484,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"PKDB/Preview Content\"";
-				DEVELOPMENT_TEAM = H2TZ68XJU7;
+				DEVELOPMENT_TEAM = LVRW7A4S2C;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = PKDB/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -482,8 +495,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.PKDB;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ti.PKDB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -494,9 +508,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"PKDB/Preview Content\"";
-				DEVELOPMENT_TEAM = H2TZ68XJU7;
+				DEVELOPMENT_TEAM = LVRW7A4S2C;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = PKDB/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -504,8 +519,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.PKDB;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ti.PKDB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

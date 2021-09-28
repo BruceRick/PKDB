@@ -7,8 +7,6 @@
 
 import SwiftUI
 import Combine
-import Apollo
-import ApolloCombine
 
 struct PokedexListView: View {
   var game: String

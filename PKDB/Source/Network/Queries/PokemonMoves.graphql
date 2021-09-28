@@ -1,0 +1,24 @@
+query pokemonMoves($pokemon: String, $game: String) {
+  pokemon_v2_pokemonmove(where: {pokemon_v2_versiongroup: {pokemon_v2_versions: {pokemon_v2_versionnames: {pokemon_v2_version: {name: {_eq: $game}}}}}, pokemon_v2_pokemon: {name: {_eq: $pokemon}}}) {
+    id
+    level
+    pokemon_v2_move {
+      name
+      power
+      pokemon_v2_type {
+        name
+      }
+      pokemon_v2_movedamageclass {
+        name
+      }
+      pokemon_v2_machines(where: {pokemon_v2_versiongroup: {pokemon_v2_versions: {pokemon_v2_versionnames: {pokemon_v2_version: {name: {_eq: $game}}}}}}) {
+        pokemon_v2_item {
+          name
+        }
+      }
+    }
+    pokemon_v2_movelearnmethod {
+      name
+    }
+  }
+}

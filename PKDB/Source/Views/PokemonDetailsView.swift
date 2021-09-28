@@ -20,10 +20,10 @@ struct PokemonDetailsView: View {
   @ViewBuilder var body: some View {
     APIContentView(request: details) { details in
       content(pokemon: details)
-        .navigationTitle(pokemonName.capitalized)
         .onAppear { loadSprite(pokemon: details) }
         .onReceive(imageLoader.didChange, perform: imageLoaded)
     }
+    .navigationTitle(pokemonName.capitalized)
   }
 
   func content(pokemon: Models.PokemonDetails?) -> some View {
@@ -33,6 +33,8 @@ struct PokemonDetailsView: View {
         types(pokemon.types)
         entry(pokemon)
         abilities(pokemon)
+        stats(pokemon)
+        evYield(pokemon)
         baseInfo(pokemon)
       }
     }
@@ -83,7 +85,7 @@ struct PokemonDetailsView: View {
 
   func abilities(_ pokemon: Models.PokemonDetails) -> some View {
     Section(header: Text("Abilities")) {
-      ForEach(pokemon.abilities.map { AbilityListItem(ability: $0) }) { item in
+      ForEach(pokemon.abilities.map(AbilityListItem.init)) { item in
         VStack(alignment: .leading, spacing: 10) {
           HStack {
             Text(item.ability.name.capitalized)
@@ -107,8 +109,46 @@ struct PokemonDetailsView: View {
     }
   }
 
+  func stats(_ pokemon: Models.PokemonDetails) -> some View {
+    Section(header: Text("Stats")) {
+      ForEach(pokemon.stats.map(StatListItem.init)) { item in
+        HStack {
+          Text(item.stat.name.capitalized)
+          Spacer()
+          Text("\(item.stat.base)")
+        }
+      }
+      HStack {
+        Text("Total")
+        Spacer()
+        Text("\(pokemon.stats.map { $0.base }.reduce(0, +))")
+      }
+    }
+  }
+
+  func evYield(_ pokemon: Models.PokemonDetails) -> some View {
+    Section(header: Text("EV Yield")) {
+      ForEach(pokemon.stats.filter { $0.effort > 0 }.map(StatListItem.init)) { item in
+        HStack {
+          Text(item.stat.name.capitalized)
+          Spacer()
+          Text("\(item.stat.effort)")
+        }
+      }
+    }
+  }
+
   func baseInfo(_ pokemon: Models.PokemonDetails) -> some View {
-    Section(header: Text("Base Info")) {
+    Section(header: Text("Other Info")) {
+      NavigationLink(destination: EmptyView()) {
+        Text("Evolutions")
+      }
+      NavigationLink(destination: MovesView(pokemon: pokemonName, game: game)) {
+        Text("Moves")
+      }
+      NavigationLink(destination: EmptyView()) {
+        Text("Locations")
+      }
       HStack {
         Text("Base Experience:")
         Spacer()
@@ -155,5 +195,12 @@ extension PokemonDetailsView {
       ability.name
     }
     var ability: Models.PokemonDetails.Ability
+  }
+
+  struct StatListItem: Identifiable {
+    var id: String {
+      stat.name
+    }
+    var stat: Models.PokemonDetails.Stat
   }
 }

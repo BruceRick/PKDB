@@ -9,30 +9,30 @@ import Foundation
 
 extension Models {
   struct PokemonDetails {
-    var baseExperience: Int
-    var height: Int
-    var weight: Int
-    var summary: String
-    var description: String
-    var types: [String]
+    let baseExperience: Int
+    let height: Int
+    let weight: Int
+    let summary: String
+    let description: String
+    let types: [String]
 
-    var sprites: [String: AnyObject]
-    var abilities: [Ability]
-    var stats: [Stat]
+    let sprites: [String: AnyObject]
+    let abilities: [Ability]
+    let stats: [Stat]
   }
 }
 
 extension Models.PokemonDetails {
   struct Ability {
-    var isHidden: Bool
-    var name: String
-    var text: String
-    var effect: String
+    let isHidden: Bool
+    let name: String
+    let text: String
+    let effect: String
   }
 
   struct Stat {
-    var effort: Int
-    var base: Int
-    var name: String
+    let effort: Int
+    let base: Int
+    let name: String
   }
 }

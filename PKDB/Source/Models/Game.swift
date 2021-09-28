@@ -9,7 +9,7 @@ import Foundation
 
 extension Models {
   struct Game: Equatable {
-    var name: String
-    var pokedexes: [String]
+    let name: String
+    let pokedexes: [String]
   }
 }

@@ -103,4 +103,29 @@ extension API {
     }
     .eraseToAnyPublisher()
   }
+
+  static func pokemonMoves(pokemon: String, game: String) -> AnyPublisher<[Models.Move]?, Error> {
+    request(query: PokemonMovesQuery(pokemon: pokemon, game: game)).tryMap {
+      $0.data?.pokemonV2Pokemonmove.map {
+        let id = $0.id
+        let name = $0.pokemonV2Move?.name ?? ""
+        let type = $0.pokemonV2Move?.pokemonV2Type?.name ?? ""
+        let damageClass = $0.pokemonV2Move?.pokemonV2Movedamageclass?.name ?? ""
+        let learnMethod = $0.pokemonV2Movelearnmethod?.name ?? ""
+        let item = $0.pokemonV2Move?.pokemonV2Machines.first?.pokemonV2Item?.name
+        let power = $0.pokemonV2Move?.power
+        let level = $0.level
+        return Models.Move(
+          id: id,
+          name: name,
+          type: type,
+          damageClass: damageClass,
+          learnMethod: learnMethod,
+          item: item,
+          power: power,
+          level: level)
+      }
+    }
+    .eraseToAnyPublisher()
+  }
 }
