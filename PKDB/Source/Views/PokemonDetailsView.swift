@@ -140,7 +140,7 @@ struct PokemonDetailsView: View {
 
   func baseInfo(_ pokemon: Models.PokemonDetails) -> some View {
     Section(header: Text("Other Info")) {
-      NavigationLink(destination: EmptyView()) {
+      NavigationLink(destination: EvolutionsView(pokemon: pokemonName, game: game)) {
         Text("Evolutions")
       }
       NavigationLink(destination: MovesView(pokemon: pokemonName, game: game)) {

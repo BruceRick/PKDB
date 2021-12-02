@@ -132,7 +132,7 @@ extension API {
   static func pokemonLocations(pokemon: String, game: String) -> AnyPublisher<[Models.Location], Error> {
     request(query: PokemonLocationsQuery(pokemon: pokemon, game: game, languageId: 9)).tryMap {
       $0.data?.pokemonV2Pokemon.first?.pokemonV2Encounters.map {
-        return Models.Location(
+       Models.Location(
           id: $0.id,
           minLevel: $0.minLevel,
           maxLevel: $0.maxLevel,
@@ -140,6 +140,44 @@ extension API {
           rarity: $0.pokemonV2Encounterslot?.rarity ?? 0,
           name: $0.pokemonV2Locationarea?.pokemonV2Location?.pokemonV2Locationnames.first?.name ?? "")
       } ?? []
+    }
+    .eraseToAnyPublisher()
+  }
+
+  static func pokemonEvolutions(pokemon: String) -> AnyPublisher<[Models.Evolution], Error> {
+    request(query: PokemonEvolutionsQuery(pokemon: pokemon)).tryMap {
+      let evolutions = $0.data?.pokemonV2Evolutionchain.first?.pokemonV2Pokemonspecies.map { pokemon -> [Models.Evolution] in
+        guard pokemon.pokemonV2Pokemonevolutions.count > 0 else {
+          return [Models.Evolution(
+            id: UUID().uuidString.hash,
+            pokemon: pokemon.name,
+            trigger: nil,
+            item: nil,
+            location: nil,
+            gender: nil,
+            timeOfDay: nil,
+            minLevel: nil,
+            minHappiness: nil,
+            minBeauty: nil,
+            minAffection: nil)]
+        }
+        return pokemon.pokemonV2Pokemonevolutions.map { evolution in
+          Models.Evolution(
+            id: evolution.id,
+            pokemon: pokemon.name,
+            trigger: evolution.pokemonV2Evolutiontrigger?.name,
+            item: evolution.pokemonV2Item?.name ?? evolution.pokemonV2ItemByHeldItemId?.name,
+            location: evolution.pokemonV2Location?.name,
+            gender: evolution.pokemonV2Gender?.name,
+            timeOfDay: evolution.timeOfDay,
+            minLevel: evolution.minLevel,
+            minHappiness: evolution.minHappiness,
+            minBeauty: evolution.minBeauty,
+            minAffection: evolution.minAffection)
+        }
+      }
+
+      return (evolutions ?? []).flatMap { $0 }
     }
     .eraseToAnyPublisher()
   }

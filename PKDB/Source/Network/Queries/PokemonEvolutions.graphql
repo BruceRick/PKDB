@@ -1,0 +1,30 @@
+query pokemonEvolutions($pokemon: String) {
+  pokemon_v2_evolutionchain(where: {pokemon_v2_pokemonspecies: {name: {_eq: $pokemon}}}) {
+    pokemon_v2_pokemonspecies(order_by: {order: asc}) {
+      name
+      pokemon_v2_pokemonevolutions {
+        id
+        min_level
+        min_happiness
+        min_beauty
+        min_affection
+        time_of_day
+        pokemon_v2_evolutiontrigger {
+          name
+        }
+        pokemon_v2_item {
+          name
+        }
+        pokemon_v2_location {
+          name
+        }
+        pokemon_v2_gender {
+          name
+        }
+        pokemonV2ItemByHeldItemId {
+          name
+        }
+      }
+    }
+  }
+}
