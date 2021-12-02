@@ -146,7 +146,7 @@ struct PokemonDetailsView: View {
       NavigationLink(destination: MovesView(pokemon: pokemonName, game: game)) {
         Text("Moves")
       }
-      NavigationLink(destination: EmptyView()) {
+      NavigationLink(destination: LocationsView(pokemon: pokemonName, game: game)) {
         Text("Locations")
       }
       HStack {

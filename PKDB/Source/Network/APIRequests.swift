@@ -128,4 +128,19 @@ extension API {
     }
     .eraseToAnyPublisher()
   }
+
+  static func pokemonLocations(pokemon: String, game: String) -> AnyPublisher<[Models.Location], Error> {
+    request(query: PokemonLocationsQuery(pokemon: pokemon, game: game, languageId: 9)).tryMap {
+      $0.data?.pokemonV2Pokemon.first?.pokemonV2Encounters.map {
+        return Models.Location(
+          id: $0.id,
+          minLevel: $0.minLevel,
+          maxLevel: $0.maxLevel,
+          encounterMethod: $0.pokemonV2Encounterslot?.pokemonV2Encountermethod?.name ?? "",
+          rarity: $0.pokemonV2Encounterslot?.rarity ?? 0,
+          name: $0.pokemonV2Locationarea?.pokemonV2Location?.pokemonV2Locationnames.first?.name ?? "")
+      } ?? []
+    }
+    .eraseToAnyPublisher()
+  }
 }

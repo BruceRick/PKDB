@@ -1,0 +1,22 @@
+query pokemonLocations($pokemon: String, $game: String, $languageId: Int) {
+  pokemon_v2_pokemon(where: {name: {_eq: $pokemon}}) {
+    pokemon_v2_encounters(where: {pokemon_v2_version: {name: {_eq: $game}}}) {
+      id
+      min_level
+      max_level
+      pokemon_v2_locationarea {
+        pokemon_v2_location {
+          pokemon_v2_locationnames(where: {language_id: {_eq: $languageId}}) {
+            name
+          }
+        }
+      }
+      pokemon_v2_encounterslot {
+        pokemon_v2_encountermethod {
+          name
+        }
+        rarity
+      }
+    }
+  }
+}

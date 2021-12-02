@@ -63,7 +63,7 @@ struct MovesView: View {
         }
       }
     }
-    .navigationTitle("Moves")
+    .navigationTitle("\(pokemon.capitalized) Moves")
   }
 
   var header: some View {
