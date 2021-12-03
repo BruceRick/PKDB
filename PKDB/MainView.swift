@@ -25,6 +25,9 @@ struct MainView: View {
         cell(text: "Pokemon",
              iconName: "circle.grid.cross.fill",
              destination: PokemonListView(pokedex: selectedPokedex, game: selectedGame.name))
+        cell(text: "Types",
+             iconName: "hammer.fill",
+             destination: TypesView())
         cell(text: "Abilities",
              iconName: "leaf.fill",
              destination: EmptyView())

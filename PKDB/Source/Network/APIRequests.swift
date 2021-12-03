@@ -181,4 +181,22 @@ extension API {
     }
     .eraseToAnyPublisher()
   }
+
+  static func pokemonTypes() -> AnyPublisher<[Models.PokemonType], Error> {
+    request(query: PokemonTypesQuery()).tryMap {
+      $0.data?.pokemonV2Type.map {
+        guard $0.pokemonV2Typeefficacies.count > 0 else {
+          return nil
+        }
+        return Models.PokemonType(
+          name: $0.name,
+          efficencies: $0.pokemonV2Typeefficacies.map {
+            Models.PokemonType.Efficency(
+              name: $0.pokemonV2TypeByTargetTypeId?.name ?? "UNKNOWN",
+              factor: $0.damageFactor)
+          })
+      }.compactMap { $0 } ?? []
+    }
+    .eraseToAnyPublisher()
+  }
 }

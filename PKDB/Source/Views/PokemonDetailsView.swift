@@ -60,14 +60,14 @@ struct PokemonDetailsView: View {
 
   func types(_ types: [String]) -> some View {
     Section(header: Text("Type")) {
-      // NavigationLink(destination: DamageRelationsView(types: types)) {
+      NavigationLink(destination: TypesView(selectedTypes: types)) {
         HStack(spacing: 20) {
           ForEach(types, id: \.self) {
             TypeIconView(type: $0, text: true)
           }
         }
         .padding([.vertical, .trailing], 10)
-      // }
+      }
     }
   }
 
