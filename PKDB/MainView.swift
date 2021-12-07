@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct MainView: View {
-  @State var selectedGame = defaultGame
-  @State var selectedPokedex = defaultGame.pokedexes.first ?? ""
+  @State var selectedGame = Storage.get(.Game) ?? defaultGame
+  @State var selectedPokedex = Storage.get(.Pokedex) ?? defaultGame.pokedexes.first ?? ""
 
   var body: some View {
     NavigationView {
@@ -17,11 +17,11 @@ struct MainView: View {
         cell(text: "Game",
              iconName: "gamecontroller.fill",
              destination: GamesListView(selected: $selectedGame),
-             selected: selectedGame.name)
+             rightText: selectedGame.name)
         cell(text: "Pokedex",
              iconName: "book.fill",
              destination: PokedexListView(game: selectedGame.name, selected: $selectedPokedex),
-             selected: selectedPokedex)
+             rightText: selectedPokedex)
         cell(text: "Pokemon",
              iconName: "circle.grid.cross.fill",
              destination: PokemonListView(pokedex: selectedPokedex, game: selectedGame.name))
@@ -44,24 +44,31 @@ struct MainView: View {
       .navigationBarTitle(Text("Pokemon Database"))
     }
     .navigationViewStyle(StackNavigationViewStyle())
-    .onChange(of: selectedGame, perform: { _ in didSetGame() })
+    .onChange(of: selectedGame, perform: didSetGame)
+    .onChange(of: selectedPokedex, perform: didSetPokedex)
   }
 
   static var defaultGame: Models.Game {
     Models.Game(name: "sword", pokedexes: ["galar"])
   }
 
-  func didSetGame() {
-    if let pokedex = selectedGame.pokedexes.first {
+  func didSetGame(_ game: Models.Game) {
+    Storage.set(game, key: .Game)
+    if let pokedex = game.pokedexes.first {
       selectedPokedex = pokedex
+      Storage.set(pokedex, key: .Pokedex)
     }
+  }
+
+  func didSetPokedex(_ pokedex: String) {
+    Storage.set(pokedex, key: .Pokedex)
   }
 }
 
 func cell<Destination: View>(text: String,
                              iconName: String,
                              destination: Destination,
-                             selected: String? = nil) -> some View {
+                             rightText: String? = nil) -> some View {
   NavigationLink(destination: destination.navigationTitle(text)) {
     HStack {
       Image(systemName: iconName)
@@ -70,7 +77,7 @@ func cell<Destination: View>(text: String,
         .padding(.horizontal, 5)
       Text(text)
       Spacer()
-      Text(selected?.capitalized ?? "")
+      Text(rightText?.capitalized ?? "")
     }.frame(minHeight: 44)
   }
 }
