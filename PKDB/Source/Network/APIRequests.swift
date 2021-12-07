@@ -146,7 +146,8 @@ extension API {
 
   static func pokemonEvolutions(pokemon: String) -> AnyPublisher<[Models.Evolution], Error> {
     request(query: PokemonEvolutionsQuery(pokemon: pokemon)).tryMap {
-      let evolutions = $0.data?.pokemonV2Evolutionchain.first?.pokemonV2Pokemonspecies.map { pokemon -> [Models.Evolution] in
+      let evolutions =
+      $0.data?.pokemonV2Evolutionchain.first?.pokemonV2Pokemonspecies.map { pokemon -> [Models.Evolution] in
         guard pokemon.pokemonV2Pokemonevolutions.count > 0 else {
           return [Models.Evolution(
             id: UUID().uuidString.hash,
@@ -182,20 +183,20 @@ extension API {
     .eraseToAnyPublisher()
   }
 
-  static func pokemonTypes() -> AnyPublisher<[Models.PokemonType], Error> {
+  static func pokemonTypes() -> AnyPublisher<Models.PokemonTypes, Error> {
     request(query: PokemonTypesQuery()).tryMap {
-      $0.data?.pokemonV2Type.map {
+      Models.PokemonTypes(all: $0.data?.pokemonV2Type.map {
         guard $0.pokemonV2Typeefficacies.count > 0 else {
           return nil
         }
-        return Models.PokemonType(
+        return Models.PokemonTypes.PokemonType(
           name: $0.name,
-          efficencies: $0.pokemonV2Typeefficacies.map {
-            Models.PokemonType.Efficency(
+          efficiencies: $0.pokemonV2Typeefficacies.map {
+            Models.PokemonTypes.Efficiency(
               name: $0.pokemonV2TypeByTargetTypeId?.name ?? "UNKNOWN",
               factor: $0.damageFactor)
           })
-      }.compactMap { $0 } ?? []
+      }.compactMap { $0 } ?? [])
     }
     .eraseToAnyPublisher()
   }
