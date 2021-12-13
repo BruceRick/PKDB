@@ -9,6 +9,7 @@ import SwiftUI
 import Combine
 
 struct PokemonListView: View {
+  @State private var searchText = ""
   var pokedex: String
   var game: String
 
@@ -20,9 +21,10 @@ struct PokemonListView: View {
 
   var body: some View {
     APIContentView(request: entries) { entries in
-      List(entries, id: \.number) { item in
+      List(filteredPokemon(entries: entries), id: \.number) { item in
         cell(item)
       }
+      .searchableSafe(text: $searchText)
       .navigationTitle(pokedex.capitalized)
     }
   }
@@ -39,6 +41,14 @@ struct PokemonListView: View {
         }
       }
     }
+  }
+
+  func filteredPokemon(entries: [Models.PokemonEntry]) -> [Models.PokemonEntry] {
+    guard !searchText.isEmpty else {
+      return entries
+    }
+
+    return entries.filter { $0.name.lowercased().contains(searchText.lowercased()) }
   }
 }
 
