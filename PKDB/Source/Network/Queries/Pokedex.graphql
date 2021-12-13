@@ -16,6 +16,13 @@ query pokedex($name: String) {
               name
             }
           }
+          pokemon_v2_pokemonstats {
+            effort
+            base_stat
+            pokemon_v2_stat {
+              name
+            }
+          }
         }
       }
     }

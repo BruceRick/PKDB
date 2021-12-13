@@ -12,5 +12,14 @@ extension Models {
     let name: String
     let number: Int
     let types: [String]
+    let stats: [Stat]
+  }
+}
+
+extension Models.PokemonEntry {
+  struct Stat {
+    let effort: Int
+    let base: Int
+    let name: String
   }
 }

@@ -10,6 +10,7 @@ import Combine
 
 struct PokemonListView: View {
   @State private var searchText = ""
+  @State private var showDetails = false
   var pokedex: String
   var game: String
 
@@ -21,25 +22,51 @@ struct PokemonListView: View {
 
   var body: some View {
     APIContentView(request: entries) { entries in
-      List(filteredPokemon(entries: entries), id: \.number) { item in
-        cell(item)
+      List(filteredPokemon(entries: entries), id: \.number) { pokemon in
+        NavigationLink(destination: PokemonDetailsView(pokemonName: pokemon.name, game: game)) {
+          summary(pokemon)
+        }
+        if showDetails {
+          stats(pokemon)
+        }
       }
       .searchableSafe(text: $searchText)
       .navigationTitle(pokedex.capitalized)
+      .toolbar {
+        Button {
+          showDetails.toggle()
+        } label: {
+          Image(systemName: showDetails ? "info.circle.fill" : "info.circle")
+        }
+      }
     }
   }
 
-  func cell(_ pokemon: Models.PokemonEntry) -> some View {
-    NavigationLink(destination: PokemonDetailsView(pokemonName: pokemon.name, game: game)) {
-      HStack {
-        Text((formattedEntryNumber(pokemon)))
-          .padding(.trailing, 5)
-        Text(pokemon.name.capitalized)
-        Spacer()
-        ForEach(pokemon.types, id: \.self) {
-          TypeIconView(type: $0)
-        }
+  func summary(_ pokemon: Models.PokemonEntry) -> some View {
+    HStack {
+      Text((formattedEntryNumber(pokemon)))
+        .padding(.trailing, 5)
+      Text(pokemon.name.capitalized)
+      Spacer()
+      ForEach(pokemon.types, id: \.self) {
+        TypeIconView(type: $0).padding(.vertical, 5)
       }
+    }
+  }
+
+  @ViewBuilder
+  func stats(_ pokemon: Models.PokemonEntry) -> some View {
+    ForEach(pokemon.stats, id: \.name) { stat in
+      HStack {
+        Text(stat.name.capitalized)
+        Spacer()
+        Text("\(stat.base)")
+      }
+    }
+    HStack {
+      Text("Total")
+      Spacer()
+      Text("\(pokemon.stats.map { $0.base }.reduce(0, +))")
     }
   }
 

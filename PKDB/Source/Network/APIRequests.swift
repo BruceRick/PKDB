@@ -46,7 +46,13 @@ extension API {
           let number = $0.pokedexNumber
           let pokemon = $0.pokemonV2Pokemonspecy?.pokemonV2Pokemons.first
           let types  = pokemon?.pokemonV2Pokemontypes.map { $0.pokemonV2Type?.name }.compactMap { $0 } ?? []
-          return .init(name: name, number: number, types: types)
+          let stats = pokemon?.pokemonV2Pokemonstats.map {
+            Models.PokemonEntry.Stat(
+              effort: $0.effort,
+              base: $0.baseStat,
+              name: $0.pokemonV2Stat?.name ?? "")
+          } ?? []
+          return .init(name: name, number: number, types: types, stats: stats)
         } ?? []
       }
       .eraseToAnyPublisher()
