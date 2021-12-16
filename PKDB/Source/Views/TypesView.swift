@@ -21,51 +21,51 @@ struct TypesView: View {
     }
   }
 
+  @ViewBuilder
   func cell(_ type: Models.PokemonTypes.PokemonType,
             efficiencies: (strengths: [Models.PokemonTypes.Efficiency],
                            weaknesses: [Models.PokemonTypes.Efficiency])) -> some View {
-    VStack(alignment: .leading, spacing: 10) {
+    Section {
       HStack(spacing: 5) {
         TypeIconView(type: type.name, text: true)
         Spacer()
         Button(expandedType == type.name ? "Collapse" : "Expand") {
           expandedType = expandedType == type.name ? "" : type.name
         }
-      }
-      if expandedType == type.name {
-        efficienciesList(efficiencies)
-      }
-    }.padding(.vertical, 10)
+      }.padding(.vertical, 10)
+    }
+    if expandedType == type.name {
+      efficienciesList(efficiencies)
+    }
   }
 
   @ViewBuilder func efficienciesList(_ efficiencies: (
                                         strengths: [Models.PokemonTypes.Efficiency],
                                        weaknesses: [Models.PokemonTypes.Efficiency])) -> some View {
-    Divider()
-      .padding(.top, 10)
-    Text("Strengths")
-      .foregroundColor(.green)
-      .fontWeight(.bold)
-      .padding(.vertical, 10)
-    Divider()
-    ForEach(efficiencies.strengths.groupedByFactor().sorted(by: { $0.key > $1.key }), id: \.key) { factor, types in
-      VStack(alignment: .leading, spacing: 10) {
-        Text(strengthText(factor: factor))
-          .fontWeight(.bold)
-        typeRows(types.rows())
+    Section {
+      Text("Strengths")
+        .foregroundColor(.green)
+        .fontWeight(.bold)
+      ForEach(efficiencies.strengths.groupedByFactor().sorted(by: { $0.key > $1.key }), id: \.key) { factor, types in
+        VStack(alignment: .leading, spacing: 10) {
+          Text(strengthText(factor: factor))
+            .fontWeight(.bold)
+            .padding(.top, 20)
+          typeRows(types.rows())
+        }
       }
     }
-    Divider()
-    Text("Weaknesses")
-      .foregroundColor(.red)
-      .fontWeight(.bold)
-      .padding(.vertical, 10)
-    Divider()
-    ForEach(efficiencies.weaknesses.groupedByFactor().sorted(by: { $0.key > $1.key }), id: \.key) { factor, types in
-      VStack(alignment: .leading, spacing: 10) {
-        Text(weaknessText(factor: factor))
-          .fontWeight(.bold)
-        typeRows(types.rows())
+    Section {
+      Text("Weaknesses")
+        .foregroundColor(.red)
+        .fontWeight(.bold)
+      ForEach(efficiencies.weaknesses.groupedByFactor().sorted(by: { $0.key > $1.key }), id: \.key) { factor, types in
+        VStack(alignment: .leading, spacing: 10) {
+          Text(weaknessText(factor: factor))
+            .fontWeight(.bold)
+            .padding(.top, 20)
+          typeRows(types.rows())
+        }
       }
     }
   }
