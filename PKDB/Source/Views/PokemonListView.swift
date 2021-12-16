@@ -9,10 +9,14 @@ import SwiftUI
 import Combine
 
 struct PokemonListView: View {
+  @Environment(\.presentationMode) var presentationMode
   @State private var searchText = ""
   @State private var showDetails = false
   var pokedex: String
   var game: String
+  var onSelect: OnSelect?
+
+  typealias OnSelect = (Models.PokemonEntry) -> Void
 
   var entryFormatter: NumberFormatter = {
     let formatter = NumberFormatter()
@@ -23,21 +27,38 @@ struct PokemonListView: View {
   var body: some View {
     APIContentView(request: entries) { entries in
       List(filteredPokemon(entries: entries), id: \.number) { pokemon in
-        NavigationLink(destination: PokemonDetailsView(pokemonName: pokemon.name, game: game)) {
-          summary(pokemon)
-        }
+        summaryNavigation(pokemon)
         if showDetails {
           stats(pokemon)
+            .transition(.move(edge: .bottom))
         }
       }
       .searchableSafe(text: $searchText)
       .navigationTitle(pokedex.capitalized)
       .toolbar {
         Button {
-          showDetails.toggle()
+          withAnimation {
+            showDetails.toggle()
+          }
         } label: {
           Image(systemName: showDetails ? "info.circle.fill" : "info.circle")
         }
+      }
+    }
+  }
+
+  @ViewBuilder
+  func summaryNavigation(_ pokemon: Models.PokemonEntry) -> some View {
+    if let onSelect = onSelect {
+      Button {
+        onSelect(pokemon)
+        presentationMode.wrappedValue.dismiss()
+      } label: {
+        summary(pokemon)
+      }
+    } else {
+      NavigationLink(destination: PokemonDetailsView(pokemonName: pokemon.name, game: game)) {
+        summary(pokemon)
       }
     }
   }

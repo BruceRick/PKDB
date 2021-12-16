@@ -12,6 +12,7 @@ struct Storage {
   enum Key: String {
     case Game
     case Pokedex
+    case Teams
     case Sprites
   }
   // swiftlint:enable identifier_name

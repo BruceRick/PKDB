@@ -25,6 +25,9 @@ struct MainView: View {
         cell(text: "Pokemon",
              iconName: "list.and.film",
              destination: PokemonListView(pokedex: selectedPokedex, game: selectedGame.name))
+        cell(text: "Team Builder",
+             iconName: "text.badge.plus",
+             destination: TeamBuilderView(game: selectedGame.name, pokedex: selectedPokedex))
         cell(text: "Types",
              iconName: "leaf.fill",
              destination: TypesView())
