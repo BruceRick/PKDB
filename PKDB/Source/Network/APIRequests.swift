@@ -42,6 +42,7 @@ extension API {
     request(query: PokedexQuery(name: pokedex))
       .map {
         $0.data?.pokemonV2Pokedex.first?.pokemonV2Pokemondexnumbers.map {
+          let id = $0.pokemonV2Pokemonspecy?.id ?? 0
           let name = $0.pokemonV2Pokemonspecy?.name ?? ""
           let number = $0.pokedexNumber
           let pokemon = $0.pokemonV2Pokemonspecy?.pokemonV2Pokemons.first
@@ -52,7 +53,7 @@ extension API {
               base: $0.baseStat,
               name: $0.pokemonV2Stat?.name ?? "")
           } ?? []
-          return .init(name: name, number: number, types: types, stats: stats)
+          return .init(id: id, name: name, number: number, types: types, stats: stats)
         } ?? []
       }
       .eraseToAnyPublisher()
@@ -97,6 +98,7 @@ extension API {
           name: $0.pokemonV2Stat?.name ?? "")
       }
       return Models.PokemonDetails(
+        id: details?.id ?? 0,
         baseExperience: details?.baseExperience ?? 0,
         height: details?.height ?? 0,
         weight: details?.weight ?? 0,
@@ -157,6 +159,7 @@ extension API {
         guard pokemon.pokemonV2Pokemonevolutions.count > 0 else {
           return [Models.Evolution(
             id: UUID().uuidString.hash,
+            pokemonId: pokemon.id,
             pokemon: pokemon.name,
             trigger: nil,
             item: nil,
@@ -171,6 +174,7 @@ extension API {
         return pokemon.pokemonV2Pokemonevolutions.map { evolution in
           Models.Evolution(
             id: evolution.id,
+            pokemonId: pokemon.id,
             pokemon: pokemon.name,
             trigger: evolution.pokemonV2Evolutiontrigger?.name,
             item: evolution.pokemonV2Item?.name ?? evolution.pokemonV2ItemByHeldItemId?.name,
@@ -205,5 +209,39 @@ extension API {
       }.compactMap { $0 } ?? [])
     }
     .eraseToAnyPublisher()
+  }
+
+  public enum ImageError: Error {
+    case invalidURL
+
+    public var errorDescription: String? {
+      switch self {
+      case .invalidURL:
+        return "Invalid image url"
+      }
+    }
+  }
+
+  static func pokemonSprite(id: Int) -> AnyPublisher<Data, Error> {
+    if let storedData = Storage.getSpriteData(pokemonId: id) {
+      return Just(storedData)
+        .setFailureType(to: Error.self)
+        .eraseToAnyPublisher()
+    }
+    return downloadPokemonSprite(id: id)
+  }
+
+  private static func downloadPokemonSprite(id: Int) -> AnyPublisher<Data, Error> {
+    let urlString = "\(API.imageURLString)\(id).png"
+    guard let url = URL(string: urlString) else {
+      return Fail<Data, Error>(error: ImageError.invalidURL).eraseToAnyPublisher()
+    }
+    return URLSession.shared.dataTaskPublisher(for: url)
+      .tryMap {
+        Storage.setSpriteData(pokemonId: id, data: $0.data)
+        return $0.data
+      }
+      .receive(on: DispatchQueue.main)
+      .eraseToAnyPublisher()
   }
 }

@@ -1,5 +1,6 @@
 query pokemonDetails($pokemon: String, $game: String, $languageId: Int) {
   pokemon_v2_pokemon(where: {name: {_eq: $pokemon}}) {
+    id
     height
     weight
     base_experience

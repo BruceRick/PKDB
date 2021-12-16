@@ -14,22 +14,17 @@ struct PokemonDetailsView: View {
   let pokemonName: String
   let game: String
 
-  @State private var imageLoader = ImageLoader(urlString: "")
-  @State private var pokemonImage: UIImage? = UIImage()
-
   @ViewBuilder var body: some View {
     APIContentView(request: details) { details in
       content(pokemon: details)
-        .onAppear { loadSprite(pokemon: details) }
-        .onReceive(imageLoader.didChange, perform: imageLoaded)
     }
     .navigationTitle(pokemonName.capitalized)
   }
 
   func content(pokemon: Models.PokemonDetails?) -> some View {
     List {
-      pokemonImageView
       if let pokemon = pokemon {
+        pokemonImageView(id: pokemon.id)
         types(pokemon.types)
         entry(pokemon)
         abilities(pokemon)
@@ -40,21 +35,16 @@ struct PokemonDetailsView: View {
     }
   }
 
-  @ViewBuilder
-  var pokemonImageView: some View {
-    switch pokemonImage {
-    case let image? where image != UIImage():
+  func pokemonImageView(id: Int) -> some View {
+    APIContentView(request: { API.pokemonSprite(id: id) }) { data in
       HStack {
         Spacer()
-        Image(uiImage: image)
+        Image(uiImage: UIImage(data: data) ?? UIImage())
           .resizable()
           .frame(width: 200, height: 200)
-          .loading(pokemonImage == nil)
           .padding(.top, 20)
         Spacer()
       }
-    default:
-      EmptyView()
     }
   }
 
@@ -165,23 +155,6 @@ struct PokemonDetailsView: View {
         Text("\(pokemon.weight)")
       }
     }
-  }
-
-  func loadSprite(pokemon: Models.PokemonDetails?) {
-    if let sprites = pokemon?.sprites["other"],
-       let official = sprites["official-artwork"] as? [String: AnyObject],
-       let urlString = official["front_default"] as? String {
-      pokemonImage = nil
-      imageLoader = ImageLoader(urlString: imageURLString(path: urlString))
-    }
-  }
-
-  func imageURLString(path: String) -> String {
-    "\(API.imageURLString)\(path.replacingOccurrences(of: "/media", with: ""))"
-  }
-
-  func imageLoaded(data: Data) {
-    pokemonImage = UIImage(data: data) ?? UIImage()
   }
 }
 

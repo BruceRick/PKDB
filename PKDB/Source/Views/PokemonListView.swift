@@ -46,11 +46,21 @@ struct PokemonListView: View {
     HStack {
       Text((formattedEntryNumber(pokemon)))
         .padding(.trailing, 5)
+      pokemonImageView(id: pokemon.id)
       Text(pokemon.name.capitalized)
       Spacer()
       ForEach(pokemon.types, id: \.self) {
-        TypeIconView(type: $0).padding(.vertical, 5)
+        TypeIconView(type: $0, height: 10, width: 10)
+          .padding(.vertical, 5)
       }
+    }
+  }
+
+  func pokemonImageView(id: Int) -> some View {
+    APIContentView(request: { API.pokemonSprite(id: id) }) { data in
+      Image(uiImage: UIImage(data: data) ?? UIImage())
+        .resizable()
+        .frame(width: 30, height: 30)
     }
   }
 

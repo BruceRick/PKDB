@@ -24,6 +24,7 @@ struct EvolutionsView: View {
   func cell(_ evolution: Models.Evolution) -> some View {
     NavigationLink(destination: PokemonDetailsView(pokemonName: evolution.pokemon, game: game)) {
       HStack(spacing: 20) {
+        pokemonImageView(id: evolution.pokemonId)
         Text(evolution.pokemon.capitalized)
           .fontWeight(.bold)
           .padding(10)
@@ -34,6 +35,14 @@ struct EvolutionsView: View {
         rightList(evolution)
       }
       .padding(.vertical, 10)
+    }
+  }
+
+  func pokemonImageView(id: Int) -> some View {
+    APIContentView(request: { API.pokemonSprite(id: id) }) { data in
+      Image(uiImage: UIImage(data: data) ?? UIImage())
+        .resizable()
+        .frame(width: 30, height: 30)
     }
   }
 

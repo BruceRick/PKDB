@@ -23,13 +23,13 @@ struct MainView: View {
              destination: PokedexListView(game: selectedGame.name, selected: $selectedPokedex),
              rightText: selectedPokedex)
         cell(text: "Pokemon",
-             iconName: "circle.grid.cross.fill",
+             iconName: "list.and.film",
              destination: PokemonListView(pokedex: selectedPokedex, game: selectedGame.name))
         cell(text: "Types",
-             iconName: "hammer.fill",
+             iconName: "leaf.fill",
              destination: TypesView())
         cell(text: "Abilities",
-             iconName: "leaf.fill",
+             iconName: "hammer.fill",
              destination: EmptyView())
         cell(text: "Moves",
              iconName: "bolt.fill",

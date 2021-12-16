@@ -12,6 +12,7 @@ struct Storage {
   enum Key: String {
     case Game
     case Pokedex
+    case Sprites
   }
   // swiftlint:enable identifier_name
 
@@ -31,5 +32,21 @@ struct Storage {
     }
 
     return try? decoder.decode(T.self, from: value)
+  }
+}
+
+extension Storage {
+  static var sprites: [Int: Data] = get(.Sprites) ?? [:]
+
+  static func getSpriteData(pokemonId: Int) -> Data? {
+    sprites[pokemonId]
+  }
+
+  static func setSpriteData(pokemonId: Int, data: Data) {
+    sprites[pokemonId] = data
+  }
+
+  static func saveSprites() {
+    set(sprites, key: .Sprites)
   }
 }

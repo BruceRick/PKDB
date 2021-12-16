@@ -10,6 +10,7 @@ import Foundation
 extension Models {
   struct Evolution {
     let id: Int
+    let pokemonId: Int
     let pokemon: String
     let trigger: String?
     let item: String?

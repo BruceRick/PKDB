@@ -1,6 +1,7 @@
 query pokemonEvolutions($pokemon: String) {
   pokemon_v2_evolutionchain(where: {pokemon_v2_pokemonspecies: {name: {_eq: $pokemon}}}) {
     pokemon_v2_pokemonspecies(order_by: {order: asc}) {
+      id
       name
       pokemon_v2_pokemonevolutions {
         id

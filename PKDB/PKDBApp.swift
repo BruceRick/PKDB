@@ -9,9 +9,17 @@ import SwiftUI
 
 @main
 struct PKDBApp: App {
-    var body: some Scene {
-        WindowGroup {
-            MainView()
-        }
+
+  init() {
+    NotificationCenter.default
+      .addObserver(forName: UIApplication.willTerminateNotification, object: nil, queue: .main) { _ in
+      Storage.saveSprites()
     }
+  }
+
+  var body: some Scene {
+    WindowGroup {
+      MainView()
+    }
+  }
 }

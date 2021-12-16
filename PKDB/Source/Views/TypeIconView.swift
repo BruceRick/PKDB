@@ -9,6 +9,8 @@ import SwiftUI
 
 struct TypeIconView: View {
   var type: String
+  var height = 20.0
+  var width = 20.0
   var text = false
 
   var body: some View {
@@ -43,6 +45,6 @@ struct TypeIconView: View {
   var imageView: some View {
     Image(type)
       .resizable()
-      .frame(width: 20, height: 20)
+      .frame(width: width, height: height)
   }
 }

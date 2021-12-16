@@ -9,6 +9,7 @@ import Foundation
 
 extension Models {
   struct PokemonDetails {
+    let id: Int
     let baseExperience: Int
     let height: Int
     let weight: Int

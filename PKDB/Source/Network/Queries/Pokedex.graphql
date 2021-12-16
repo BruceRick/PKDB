@@ -9,6 +9,7 @@ query pokedex($name: String) {
     pokemon_v2_pokemondexnumbers(order_by: {pokedex_number: asc}) {
       pokedex_number
       pokemon_v2_pokemonspecy {
+        id
         name
         pokemon_v2_pokemons {
           pokemon_v2_pokemontypes {
