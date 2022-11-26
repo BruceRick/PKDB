@@ -15,7 +15,7 @@ struct PokedexListView: View {
   @Environment(\.colorScheme) var colorScheme
 
   var body: some View {
-    APIContentView(request: games) { pokedexes in
+    APIContentView(request: pokedexes) { pokedexes in
       List(pokedexes, id: \.self) { pokedex in
         Button { didSelect(pokedex) } label: {
           HStack {
@@ -38,7 +38,7 @@ struct PokedexListView: View {
 }
 
 extension PokedexListView {
-  func games() -> AnyPublisher<[String], Error> {
+  func pokedexes() -> AnyPublisher<[String], Error> {
     API.pokedexes(game: game)
   }
 }

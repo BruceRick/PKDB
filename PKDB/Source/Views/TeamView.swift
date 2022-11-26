@@ -142,7 +142,11 @@ struct TeamView: View {
 
   func pokemonSelected(entry: Models.PokemonEntry) {
     let stats = entry.stats.map { Models.Team.Pokemon.Stat(base: $0.base, name: $0.name) }
-    let pokemon = Models.Team.Pokemon(id: entry.id, pokedex: pokedex, name: entry.name, types: entry.types, stats: stats)
+    let pokemon = Models.Team.Pokemon(id: entry.id,
+                                      pokedex: pokedex,
+                                      name: entry.name,
+                                      types: entry.types,
+                                      stats: stats)
     team.pokemon.append(pokemon)
   }
 

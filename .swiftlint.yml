@@ -5,6 +5,9 @@ opt_in_rules:
 - unneeded_parentheses_in_closure_argument
 - vertical_whitespace_closing_braces
 
+disabled_rules:
+- multiple_closures_with_trailing_closure
+
 included:
 - PKDB
 
